@@ -1,11 +1,11 @@
-package ru.prakticum.yandex;
+package ru.prakticum.yandex.ewm;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StatsApplicationTests {
+class EwmApplicationTests {
 
     @Test
     @Disabled
