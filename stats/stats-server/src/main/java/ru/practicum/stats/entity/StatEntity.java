@@ -1,4 +1,4 @@
-package ru.prakticum.yandex.entity;
+package ru.practicum.stats.entity;
 
 
 import lombok.Getter;

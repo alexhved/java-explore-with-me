@@ -1,8 +1,8 @@
-package ru.prakticum.yandex.repository;
+package ru.practicum.stats.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.prakticum.yandex.entity.StatEntity;
+import ru.practicum.stats.entity.StatEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

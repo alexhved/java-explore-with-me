@@ -1,10 +1,10 @@
-package ru.prakticum.yandex.service;
+package ru.practicum.stats.service;
 
 import dto.ResponseStat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.prakticum.yandex.entity.StatEntity;
-import ru.prakticum.yandex.repository.StatRepository;
+import ru.practicum.stats.entity.StatEntity;
+import ru.practicum.stats.repository.StatRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

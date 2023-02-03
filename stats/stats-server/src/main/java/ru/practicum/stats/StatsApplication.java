@@ -1,13 +1,13 @@
-package ru.prakticum.yandex.ewm;
+package ru.practicum.stats;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EwmApplication {
+public class StatsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EwmApplication.class, args);
+        SpringApplication.run(StatsApplication.class, args);
     }
 
 }

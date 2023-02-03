@@ -1,11 +1,11 @@
-package ru.prakticum.yandex.mapper;
+package ru.practicum.stats.mapper;
 
 import dto.RequestStat;
 import dto.ResponseStat;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import ru.prakticum.yandex.entity.StatEntity;
+import ru.practicum.stats.entity.StatEntity;
 
 
 import java.time.LocalDateTime;
