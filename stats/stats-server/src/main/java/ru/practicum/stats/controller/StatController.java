@@ -25,6 +25,7 @@ public class StatController {
     public void save(@RequestBody RequestStat requestStat) {
         StatEntity statEntity = statMapper.toStatEntity(requestStat);
         statService.save(statEntity);
+        log.info("StatService.save: " + requestStat.toString() + " /hit");
     }
 
     @GetMapping("/stats")
@@ -32,6 +33,9 @@ public class StatController {
                                    @RequestParam String end,
                                    @RequestParam(required = false, defaultValue = "false") boolean unique,
                                    @RequestParam String uris) {
-        return statService.find(start, end, unique, uris);
+
+        List<ResponseStat> responseStats = statService.find(start, end, unique, uris);
+        log.info("StatService.find: " + uris + " size - " + responseStats.size() + " /stats");
+        return responseStats;
     }
 }
