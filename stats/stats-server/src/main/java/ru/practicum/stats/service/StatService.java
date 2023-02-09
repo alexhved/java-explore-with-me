@@ -3,6 +3,7 @@ package ru.practicum.stats.service;
 import dto.ResponseStat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.entity.StatEntity;
 import ru.practicum.stats.repository.StatRepository;
 
@@ -15,12 +16,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StatService {
     private final StatRepository statRepository;
+
 
     public void save(StatEntity statEntity) {
         statRepository.save(statEntity);
     }
+
 
     public List<ResponseStat> find(String start, String end, boolean unique, String uris) {
         String[] urisArray = uris.split(",");

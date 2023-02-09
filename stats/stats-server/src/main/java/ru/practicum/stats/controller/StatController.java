@@ -13,6 +13,8 @@ import ru.practicum.stats.mapper.StatMapper;
 import ru.practicum.stats.service.StatService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 
@@ -32,8 +34,8 @@ public class StatController {
     }
 
     @GetMapping("/stats")
-    public List<ResponseStat> find(@RequestParam String start,
-                                   @RequestParam String end,
+    public List<ResponseStat> find(@PositiveOrZero @RequestParam String start,
+                                   @Positive @RequestParam String end,
                                    @RequestParam(required = false, defaultValue = "false") boolean unique,
                                    @RequestParam String uris) {
 
