@@ -24,12 +24,10 @@ public class PublicCompilationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CompilationDto>> findWithParams
-            (
-                    @RequestParam(required = false) Boolean pinned,
-                    @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
-                    @Positive @RequestParam(required = false, defaultValue = "10") Integer size
-            ) {
+    public ResponseEntity<List<CompilationDto>> findWithParams(
+            @RequestParam(required = false) Boolean pinned,
+            @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
+            @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
         List<CompilationDto> compilationDtoList = compilationService.findWithParams(pinned, from, size);
         return new ResponseEntity<>(compilationDtoList, HttpStatus.OK);
     }

@@ -44,19 +44,17 @@ public class PublicEventController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<EventShortDto>> findWithParams
-            (
-                    @RequestParam(required = false) String text,
-                    @RequestParam(required = false) List<Integer> categories,
-                    @RequestParam(required = false) Boolean paid,
-                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-                    @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
-                    @RequestParam(required = false) SortingState sort,
-                    @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
-                    @Positive @RequestParam(required = false, defaultValue = "10") Integer size,
-                    HttpServletRequest servletRequest
-            ) {
+    public ResponseEntity<List<EventShortDto>> findWithParams(
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) List<Integer> categories,
+            @RequestParam(required = false) Boolean paid,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(required = false) SortingState sort,
+            @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
+            @Positive @RequestParam(required = false, defaultValue = "10") Integer size,
+            HttpServletRequest servletRequest) {
         EventSearchParamsDto eventSearchParamsDto =
                 new EventSearchParamsDto(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         List<EventShortDto> eventShortDtoList = eventService.findBySearchParamsForPublic(eventSearchParamsDto);

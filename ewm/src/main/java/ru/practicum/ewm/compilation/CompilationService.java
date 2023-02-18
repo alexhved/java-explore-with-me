@@ -56,7 +56,7 @@ public class CompilationService {
         compilationRepository.deleteById(compId);
     }
 
-    public CompilationDto PatchCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
+    public CompilationDto patchCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         CompilationEntity compilationEntity = compilationRepository.findById(compId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Compilation with id: %s not found", compId)));
 

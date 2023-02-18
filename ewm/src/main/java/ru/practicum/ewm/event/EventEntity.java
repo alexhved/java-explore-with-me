@@ -13,7 +13,8 @@ import java.util.Objects;
 @Table(name = "events")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 public class EventEntity {
 

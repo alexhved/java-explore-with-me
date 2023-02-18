@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
+import ru.practicum.ewm.DateTimeConst;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
-    private final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DTF = DateTimeConst.DTF;
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

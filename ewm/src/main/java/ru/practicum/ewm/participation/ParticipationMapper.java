@@ -1,6 +1,7 @@
 package ru.practicum.ewm.participation;
 
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.DateTimeConst;
 import ru.practicum.ewm.event.EventEntity;
 import ru.practicum.ewm.users.UserEntity;
 
@@ -9,8 +10,8 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class ParticipationMapper {
+    private static final DateTimeFormatter DTF = DateTimeConst.DTF;
 
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public ParticipationEntity buildEntity(UserEntity userEntity, EventEntity eventEntity, Status status) {
         return ParticipationEntity.builder()
                 .requester(userEntity)
@@ -20,8 +21,7 @@ public class ParticipationMapper {
                 .build();
     }
 
-    public ParticipationRequestDto buildParticipationRequestDto(ParticipationEntity participationEntity,
-                                                                Long userId) {
+    public ParticipationRequestDto buildParticipationRequestDto(ParticipationEntity participationEntity, Long userId) {
         return ParticipationRequestDto.builder()
                 .id(participationEntity.getId())
                 .requester(userId)

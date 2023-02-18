@@ -36,7 +36,7 @@ public class AdminCompilationController {
     @PatchMapping("/{compId}")
     public ResponseEntity<CompilationDto> patchCompilation(@Positive @PathVariable Long compId,
                                                            @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        CompilationDto compilationDto = compilationService.PatchCompilation(compId, updateCompilationRequest);
+        CompilationDto compilationDto = compilationService.patchCompilation(compId, updateCompilationRequest);
         log.info("patch compilation: {}", updateCompilationRequest);
         return new ResponseEntity<>(compilationDto, HttpStatus.OK);
     }
