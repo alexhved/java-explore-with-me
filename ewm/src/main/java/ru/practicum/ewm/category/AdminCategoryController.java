@@ -15,13 +15,14 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/admin/categories")
 @Slf4j
 @Validated
-public class CategoryController {
+public class AdminCategoryController {
 
     private final CategoryService categoryService;
 
     @PostMapping
     public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
         CategoryDto categoryDto = categoryService.addCategory(newCategoryDto);
+        log.info("add category: {}", newCategoryDto);
         return new ResponseEntity<>(categoryDto, HttpStatus.CREATED);
     }
 
@@ -30,12 +31,14 @@ public class CategoryController {
                                                       @Valid @RequestBody NewCategoryDto newCategoryDto) {
 
         CategoryDto categoryDto = categoryService.updateCategoryById(catId, newCategoryDto);
+        log.info("update category: {}", newCategoryDto);
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{catId}")
     public ResponseEntity<Void> deleteCategory(@Positive @PathVariable Long catId) {
         categoryService.deleteCategory(catId);
+        log.info("delete category with id: {}", catId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

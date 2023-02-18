@@ -2,9 +2,11 @@ package ru.practicum.stats.controller;
 
 
 import dto.RequestStat;
-import dto.ResponseStat;
+import dto.ViewStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,20 +29,21 @@ public class StatController {
     private final StatMapper statMapper;
 
     @PostMapping("/hit")
-    public void save(@Valid @RequestBody RequestStat requestStat) {
+    public ResponseEntity<Void> save(@Valid @RequestBody RequestStat requestStat) {
         StatEntity statEntity = statMapper.toStatEntity(requestStat);
         statService.save(statEntity);
         log.info("StatService.save: " + requestStat.toString() + " /hit");
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/stats")
-    public List<ResponseStat> find(@PositiveOrZero @RequestParam String start,
-                                   @Positive @RequestParam String end,
-                                   @RequestParam(required = false, defaultValue = "false") boolean unique,
-                                   @RequestParam String uris) {
+    public List<ViewStats> find(@PositiveOrZero @RequestParam String start,
+                                @Positive @RequestParam String end,
+                                @RequestParam(required = false, defaultValue = "false") boolean unique,
+                                @RequestParam String uris) {
 
-        List<ResponseStat> responseStats = statService.find(start, end, unique, uris);
-        log.info("StatService.find: " + uris + " size - " + responseStats.size() + " /stats");
-        return responseStats;
+        List<ViewStats> viewStats = statService.find(start, end, unique, uris);
+        log.info("StatService.find: " + uris + " size - " + viewStats.size() + " /stats");
+        return viewStats;
     }
 }

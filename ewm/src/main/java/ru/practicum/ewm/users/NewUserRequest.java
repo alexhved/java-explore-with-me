@@ -1,4 +1,4 @@
-package ru.practicum.ewm.user;
+package ru.practicum.ewm.users;
 
 import lombok.*;
 
@@ -11,14 +11,14 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-public class UserShortDto {
+public class NewUserRequest {
 
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 50)
     private String name;
 
     @NotBlank
     @Email
-    @Size(max = 30)
+    @Size(max = 50)
     private String email;
 }

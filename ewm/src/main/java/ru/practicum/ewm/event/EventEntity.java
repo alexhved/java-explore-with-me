@@ -3,7 +3,7 @@ package ru.practicum.ewm.event;
 
 import lombok.*;
 import ru.practicum.ewm.category.CategoryEntity;
-import ru.practicum.ewm.user.UserEntity;
+import ru.practicum.ewm.users.UserEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,15 +23,15 @@ public class EventEntity {
 
     private String title;
 
-    @OneToOne
-    @JoinColumn(name = "initiator_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "initiator_id", referencedColumnName = "id", nullable = false)
     private UserEntity initiator;
 
     @Column(length = 2000, nullable = false)
     private String annotation;
 
-    @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private CategoryEntity category;
 
     @Column(length = 7000, nullable = false)
@@ -62,6 +62,8 @@ public class EventEntity {
 
     @Column(name = "req_moderation")
     private boolean requestModeration;
+
+    private long views;
 
 
 

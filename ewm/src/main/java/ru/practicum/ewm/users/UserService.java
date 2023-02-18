@@ -1,13 +1,15 @@
-package ru.practicum.ewm.user;
+package ru.practicum.ewm.users;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
@@ -17,8 +19,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDto save(UserShortDto userShortDto) {
-        UserEntity savedUser = userRepository.save(userMapper.toEntity(userShortDto));
+    public UserDto save(NewUserRequest newUserRequest) {
+        UserEntity savedUser = userRepository.save(userMapper.toEntity(newUserRequest));
         return userMapper.toUserDto(savedUser);
     }
 
@@ -33,14 +35,4 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    private boolean checkIds(String[] ids) {
-        for (String id : ids) {
-            for (int i = 0; i < id.length(); i++) {
-                if (!Character.isDigit(id.charAt(i))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 }

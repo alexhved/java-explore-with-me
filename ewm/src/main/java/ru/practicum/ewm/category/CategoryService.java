@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.error.ResourceNotFoundException;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
         CategoryEntity categoryEntity = categoryRepository.save(categoryMapper.toEntity(newCategoryDto));
         return categoryMapper.toDto(categoryEntity);

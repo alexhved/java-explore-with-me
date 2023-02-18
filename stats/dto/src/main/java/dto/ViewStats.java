@@ -8,10 +8,10 @@ import lombok.*;
 @Setter
 @Builder
 @EqualsAndHashCode
-public class ResponseStat {
+public class ViewStats {
     private String app;
 
     private String uri;
 
-    private int hits;
+    private long hits;
 }

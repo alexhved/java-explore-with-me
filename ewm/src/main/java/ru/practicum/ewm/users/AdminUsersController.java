@@ -1,4 +1,4 @@
-package ru.practicum.ewm.user;
+package ru.practicum.ewm.users;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
 @Validated
-public class UserController {
+public class AdminUsersController {
 
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> save(@Valid @RequestBody UserShortDto userShortDto) {
+    public ResponseEntity<UserDto> save(@Valid @RequestBody NewUserRequest newUserRequest) {
 
-        UserDto userDto = userService.save(userShortDto);
+        UserDto userDto = userService.save(newUserRequest);
         log.info("userService.save {}", userDto);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }

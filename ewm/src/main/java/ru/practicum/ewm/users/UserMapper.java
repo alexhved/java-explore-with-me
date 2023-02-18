@@ -1,4 +1,4 @@
-package ru.practicum.ewm.user;
+package ru.practicum.ewm.users;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
 
-    UserEntity toEntity(UserShortDto userShortDto);
+    UserEntity toEntity(NewUserRequest newUserRequest);
 
     UserDto toUserDto(UserEntity userEntity);
 

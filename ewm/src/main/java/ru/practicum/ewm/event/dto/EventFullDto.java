@@ -1,11 +1,13 @@
-package ru.practicum.ewm.event;
+package ru.practicum.ewm.event.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.category.CategoryDto;
-import ru.practicum.ewm.user.UserShortDto;
+import ru.practicum.ewm.event.Location;
+import ru.practicum.ewm.event.State;
+import ru.practicum.ewm.users.UserShortDto;
 
 @Data
 @AllArgsConstructor
