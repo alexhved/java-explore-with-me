@@ -31,10 +31,10 @@ create table if not exists events
     participant_limit integer,
     published_on      timestamp,
     req_moderation    boolean,
-    state            varchar(255)  not null,
-    title             varchar(255)  not null,
+    state             varchar(30)   not null,
+    title             varchar(120)  not null,
     views             bigint,
-    category_id       bigint        not null references categories (id) on delete restrict ,
+    category_id       bigint        not null references categories (id) on delete restrict,
     initiator_id      bigint        not null references users (id) on delete cascade
 );
 

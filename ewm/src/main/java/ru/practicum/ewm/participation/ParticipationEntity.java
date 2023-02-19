@@ -21,7 +21,7 @@ public class ParticipationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private LocalDateTime created;
 
     @Column(nullable = false, length = 20)

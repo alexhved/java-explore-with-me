@@ -1,12 +1,12 @@
 package ru.practicum.ewm.event;
 
 
-import client.StatClient;
-import dto.RequestStat;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.stat_client.StatService;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventSearchParamsDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
@@ -15,30 +15,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
 @RequestMapping("/events")
+@RequiredArgsConstructor
 public class PublicEventController {
-    public static final String EWM_MAIN_SERVICE = "ewm-main-service";
-
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final EventService eventService;
-    private final StatClient statClient;
-
-    public PublicEventController(EventService eventService, StatClient statClient) {
-        this.eventService = eventService;
-        this.statClient = statClient;
-    }
+    private final StatService statService;
 
     @GetMapping("/{id}")
     public ResponseEntity<EventFullDto> findById(@Positive @PathVariable Long id, HttpServletRequest servletRequest) {
         EventFullDto eventFullDto = eventService.findByIdAndStatePUBLISHED(id);
-
-        RequestStat requestStat = buildRequestStatDto(servletRequest);
-
-        statClient.save(requestStat);
+        statService.saveStat(servletRequest);
 
         return new ResponseEntity<>(eventFullDto, HttpStatus.OK);
     }
@@ -59,19 +48,8 @@ public class PublicEventController {
                 new EventSearchParamsDto(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         List<EventShortDto> eventShortDtoList = eventService.findBySearchParamsForPublic(eventSearchParamsDto);
 
-        RequestStat requestStat = buildRequestStatDto(servletRequest);
-
-        statClient.save(requestStat);
+        statService.saveStat(servletRequest);
 
         return new ResponseEntity<>(eventShortDtoList, HttpStatus.OK);
-    }
-
-    private static RequestStat buildRequestStatDto(HttpServletRequest servletRequest) {
-        RequestStat requestStat = new RequestStat();
-        requestStat.setApp(EWM_MAIN_SERVICE);
-        requestStat.setUri(servletRequest.getRequestURI());
-        requestStat.setIp(servletRequest.getRemoteAddr());
-        requestStat.setTimestamp(LocalDateTime.now().format(DTF));
-        return requestStat;
     }
 }
