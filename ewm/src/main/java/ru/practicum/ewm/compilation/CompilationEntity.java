@@ -22,7 +22,7 @@ public class CompilationEntity {
     @Column(nullable = false)
     private boolean pinned;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @ManyToMany(fetch = FetchType.LAZY)

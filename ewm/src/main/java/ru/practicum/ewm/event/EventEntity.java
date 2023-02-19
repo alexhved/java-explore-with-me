@@ -22,6 +22,7 @@ public class EventEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(length = 100)
     private String title;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -53,7 +54,7 @@ public class EventEntity {
     @Column(nullable = false)
     private float longitude;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private State state;
     private boolean paid;

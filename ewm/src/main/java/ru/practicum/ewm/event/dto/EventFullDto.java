@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.ewm.category.CategoryDto;
 import ru.practicum.ewm.event.Location;
 import ru.practicum.ewm.event.State;
+import ru.practicum.ewm.ratings.RatingDto;
 import ru.practicum.ewm.users.UserShortDto;
 
 @Data
@@ -30,4 +31,5 @@ public class EventFullDto {
     private State state;
     private String title;
     private long views;
+    private RatingDto rating;
 }

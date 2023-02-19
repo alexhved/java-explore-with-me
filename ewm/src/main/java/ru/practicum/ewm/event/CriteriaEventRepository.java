@@ -81,6 +81,8 @@ public class CriteriaEventRepository {
 
     private Predicate buildPredicate(CriteriaBuilder cb, Root<EventEntity> root, EventSearchParamsDto paramsDto) {
         List<Predicate> predicateList = new ArrayList<>();
+        predicateList.add(cb.equal(root.get("state"), State.PUBLISHED));
+
         if (paramsDto.getText() != null) {
             Predicate predicateAnnotation = cb.like(root.get("annotation"), "%" + paramsDto.getText() + "%");
             Predicate predicateDescription = cb.like(root.get("description"), "%" + paramsDto.getText() + "%");

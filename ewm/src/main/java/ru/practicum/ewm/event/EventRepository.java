@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
+
     @Query("select e from EventEntity e where e.id = :id and e.state = 'PUBLISHED'")
     Optional<EventEntity> findByIdAndStatePUBLISHED(Long id);
 

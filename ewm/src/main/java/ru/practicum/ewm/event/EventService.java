@@ -6,16 +6,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import ru.practicum.ewm.event.dto.AdminSearchParamsDto;
-import ru.practicum.ewm.users.UserEntity;
-import ru.practicum.ewm.users.UserRepository;
-import ru.practicum.ewm.users.UserShortDto;
 import ru.practicum.ewm.category.CategoryEntity;
 import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.error.DateTimeException;
 import ru.practicum.ewm.error.ResourceNotFoundException;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.participation.ParticipationRepository;
+import ru.practicum.ewm.ratings.EventIdVsLikes;
+import ru.practicum.ewm.ratings.RatingDto;
+import ru.practicum.ewm.ratings.RatingProducer;
+import ru.practicum.ewm.ratings.RatingRepository;
+import ru.practicum.ewm.users.UserEntity;
+import ru.practicum.ewm.users.UserRepository;
+import ru.practicum.ewm.users.UserShortDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +36,9 @@ public class EventService {
     private final CategoryRepository categoryRepository;
     private final ParticipationRepository participationRepository;
     private final CriteriaEventRepository criteriaEventRepository;
+    private final RatingRepository ratingRepository;
     private final EventMapper eventMapper;
+    private final RatingProducer ratingProducer;
 
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
 
@@ -185,23 +190,43 @@ public class EventService {
         confirmedListMap.forEach(value -> confirmedMap.put(value.getEventId(), value.getConfParticipantCount()));
 
         page.getContent().forEach(this::incrementViews);
+
         List<EventEntity> eventEntities = eventRepository.saveAllAndFlush(page.getContent());
 
-        return eventEntities.stream()
+        Map<Long, Long> eventIdVsLikesMap = ratingRepository.findLikesByEventIdList(eventIdList).stream()
+                .collect(Collectors.toMap(EventIdVsLikes::getEventId, EventIdVsLikes::getLikes));
+
+        Map<Long, Long> eventIdDislikesMap = ratingRepository.findDislikesByEventIdList(eventIdList).stream()
+                .collect(Collectors.toMap(EventIdVsLikes::getEventId, EventIdVsLikes::getLikes));
+
+        List<EventShortDto> eventShortDtoList = eventEntities.stream()
                 .map(eventEntity -> {
-                    Integer confirmedReq = confirmedMap.getOrDefault(eventEntity.getId(), 0L).intValue();
-                    return eventMapper.buildEventShortDto(eventEntity, confirmedReq);
+                    int confirmedReq = confirmedMap.getOrDefault(eventEntity.getId(), 0L).intValue();
+                    int likes = eventIdVsLikesMap.getOrDefault(eventEntity.getId(), 0L).intValue();
+                    int dislikes = eventIdDislikesMap.getOrDefault(eventEntity.getId(), 0L).intValue();
+                    RatingDto ratingDto = ratingProducer.calculate(likes, dislikes);
+                    return eventMapper.buildEventShortDto(eventEntity, confirmedReq, ratingDto);
                 })
                 .collect(Collectors.toList());
+
+        if (eventSearchParamsDto.getSort().equals(SortingState.LIKES)) {
+            eventShortDtoList.sort((o1, o2) -> o2.getRating().getRating() - o1.getRating().getRating());
+        }
+
+        return eventShortDtoList;
     }
 
     public EventFullDto findByIdAndStatePUBLISHED(Long id) {
         EventEntity eventEntity = eventRepository.findByIdAndStatePUBLISHED(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Event with id: %s not found", id)));
 
+        Integer likes = ratingRepository.countLikesByEventId(id);
+        Integer dislikes = ratingRepository.countDislikesByEventId(id);
+        RatingDto ratingDto = ratingProducer.calculate(likes, dislikes);
+
         incrementViews(eventEntity);
 
-        return eventMapper.buildEventFullDto(eventEntity);
+        return eventMapper.buildEventFullDto(eventEntity, ratingDto);
     }
 
     private void incrementViews(EventEntity eventEntity) {
