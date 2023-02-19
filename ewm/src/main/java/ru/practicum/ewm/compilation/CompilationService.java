@@ -106,26 +106,29 @@ public class CompilationService {
     public List<CompilationDto> findWithParams(Boolean pinned, Integer from, Integer size) {
         Page<CompilationEntity> compilationEntityPage = criteriaCompilationRepository.findWithParams(pinned, from, size);
 
-        List<CompilationDto> compilationDtoList = new ArrayList<>();
-
-        for (CompilationEntity compilationEntity : compilationEntityPage.getContent()) {
-            List<Long> eventIdList = compilationEntity.getEvents().stream()
+        List<Long> eventIdList = new ArrayList<>();
+        compilationEntityPage.getContent().forEach(compEntity -> {
+            List<Long> eventIds = compEntity.getEvents().stream()
                     .map(EventEntity::getId)
                     .collect(Collectors.toList());
+            eventIdList.addAll(eventIds);
+        });
 
-            List<EventEntity> eventEntityList = eventRepository.findByEventIdList(eventIdList);
-            Map<Long, Long> confirmed = participationRepository.eventId_vs_ConfirmedParticipants(eventIdList);
+        Map<Long, Long> confirmed = participationRepository.eventId_vs_ConfirmedParticipants(eventIdList);
 
-            List<EventShortDto> eventShortDtoList = eventEntityList.stream()
+        List<CompilationDto> compilationDtoList = new ArrayList<>();
+        compilationEntityPage.getContent().forEach(compEntity -> {
+            List<EventShortDto> eventShortDtoList = compEntity.getEvents().stream()
                     .map(eventEntity -> {
                         Integer confirmedReq = confirmed.getOrDefault(eventEntity.getId(), 0L).intValue();
                         return eventMapper.buildEventShortDto(eventEntity, confirmedReq);
                     })
                     .collect(Collectors.toList());
 
-            CompilationDto compilationDto = compilationMapper.buildDto(compilationEntity, eventShortDtoList);
+            CompilationDto compilationDto = compilationMapper.buildDto(compEntity, eventShortDtoList);
             compilationDtoList.add(compilationDto);
-        }
+        });
+
         return compilationDtoList;
     }
 }
