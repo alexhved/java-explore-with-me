@@ -1,2 +1,3 @@
 # java-explore-with-me
-# https://github.com/alexhved/java-explore-with-me/pull/3
+# 
+[pr feature ratings](https://github.com/alexhved/java-explore-with-me/pull/3)
