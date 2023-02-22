@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    @Query("select new java.lang.String(u.name) from UserEntity u where u.id =:userId")
+    String findUserName(Long userId);
+
     @Query("select u from UserEntity u where u.id in :ids")
     Page<UserEntity> findByIdS(Long[] ids, Pageable pageable);
 

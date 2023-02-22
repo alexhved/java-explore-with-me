@@ -17,6 +17,7 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final RatingProducer ratingProducer;
 
     public void addRate(Long userId, Long eventId, Boolean isPositive) {
         UserEntity userEntity = userRepository.findById(userId)
@@ -29,5 +30,16 @@ public class RatingService {
 
     public void deleteRate(Long userId, Long eventId) {
         ratingRepository.deleteByInitiator_IdAndEvent_Id(userId, eventId);
+    }
+
+    public UserRatingDto findRatingForAuthor(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException(String.format("User with id: %s not found", userId));
+        }
+        String authorName = userRepository.findUserName(userId);
+        Integer likes = ratingRepository.findLikesForAuthor(userId);
+        Integer dislikes = ratingRepository.findDislikesForAuthor(userId);
+        Integer rating = ratingProducer.calculateRating(likes, dislikes);
+        return new UserRatingDto(authorName, rating);
     }
 }

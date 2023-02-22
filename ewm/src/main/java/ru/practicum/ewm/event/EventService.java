@@ -204,7 +204,7 @@ public class EventService {
                     int confirmedReq = confirmedMap.getOrDefault(eventEntity.getId(), 0L).intValue();
                     int likes = eventIdVsLikesMap.getOrDefault(eventEntity.getId(), 0L).intValue();
                     int dislikes = eventIdDislikesMap.getOrDefault(eventEntity.getId(), 0L).intValue();
-                    RatingDto ratingDto = ratingProducer.calculate(likes, dislikes);
+                    RatingDto ratingDto = ratingProducer.calculateDto(likes, dislikes);
                     return eventMapper.buildEventShortDto(eventEntity, confirmedReq, ratingDto);
                 })
                 .collect(Collectors.toList());
@@ -222,7 +222,7 @@ public class EventService {
 
         Integer likes = ratingRepository.countLikesByEventId(id);
         Integer dislikes = ratingRepository.countDislikesByEventId(id);
-        RatingDto ratingDto = ratingProducer.calculate(likes, dislikes);
+        RatingDto ratingDto = ratingProducer.calculateDto(likes, dislikes);
 
         incrementViews(eventEntity);
 
