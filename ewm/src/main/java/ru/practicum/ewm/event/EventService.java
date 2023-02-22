@@ -209,7 +209,7 @@ public class EventService {
                 })
                 .collect(Collectors.toList());
 
-        if (eventSearchParamsDto.getSort().equals(SortingState.LIKES)) {
+        if (eventSearchParamsDto.getSort() != null && eventSearchParamsDto.getSort().equals(SortingState.LIKES)) {
             eventShortDtoList.sort((o1, o2) -> o2.getRating().getRating() - o1.getRating().getRating());
         }
 
