@@ -1,54 +1,46 @@
 package ru.practicum.stats.service;
 
-import dto.ResponseStat;
+import dto.ViewStats;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.entity.StatEntity;
 import ru.practicum.stats.repository.StatRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StatService {
     private final StatRepository statRepository;
+
 
     public void save(StatEntity statEntity) {
         statRepository.save(statEntity);
     }
 
-    public List<ResponseStat> find(String start, String end, boolean unique, String uris) {
+
+    public List<ViewStats> find(String start, String end, boolean unique, String uris) {
         String[] urisArray = uris.split(",");
         LocalDateTime startTime = parseTimestamp(start);
         LocalDateTime endTime = parseTimestamp(end);
-        List<StatEntity> statEntityList;
+        List<ViewStats> viewStatsList;
         if (unique) {
-            statEntityList = statRepository.findByTimeUnique(startTime, endTime, urisArray);
+            viewStatsList = statRepository.findByTimeUnique(startTime, endTime, urisArray);
         } else {
-            statEntityList = statRepository.findByTime(startTime, endTime, urisArray);
+            viewStatsList = statRepository.findByTime(startTime, endTime, urisArray);
+        }
+        if (viewStatsList.isEmpty()) {
+            viewStatsList = statRepository.findAllByTime(startTime, endTime);
         }
 
-        List<ResponseStat> responseStatList = new ArrayList<>(urisArray.length);
-        for (String uri : urisArray) {
-            responseStatList.add(new ResponseStat("ewm-main-service", uri, 0));
-        }
-
-        statEntityList.forEach(statEntity -> {
-            for (ResponseStat responseStat : responseStatList) {
-                if (statEntity.getUri().equals(responseStat.getUri())) {
-                    int hits = responseStat.getHits();
-                    responseStat.setHits(++hits);
-                }
-            }
-        });
-
-        return responseStatList.stream()
-                .sorted(Comparator.comparing(ResponseStat::getHits).reversed()).collect(Collectors.toList());
+        return viewStatsList.stream()
+                .sorted(Comparator.comparing(ViewStats::getHits).reversed()).collect(Collectors.toList());
     }
 
     private LocalDateTime parseTimestamp(String timestamp) {

@@ -1,7 +1,7 @@
 package ru.practicum.stats.mapper;
 
 import dto.RequestStat;
-import dto.ResponseStat;
+import dto.ViewStats;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -22,5 +22,5 @@ public interface StatMapper {
         return LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    ResponseStat toResponseStat(StatEntity statEntity);
+    ViewStats toResponseStat(StatEntity statEntity);
 }
