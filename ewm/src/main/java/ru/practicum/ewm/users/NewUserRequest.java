@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class NewUserRequest {
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 30)
     private String name;
 
     @NotBlank

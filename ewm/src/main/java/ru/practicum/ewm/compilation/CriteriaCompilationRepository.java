@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +25,7 @@ public class CriteriaCompilationRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<CompilationEntity> cq = cb.createQuery(CompilationEntity.class);
         Root<CompilationEntity> root = cq.from(CompilationEntity.class);
+        root.fetch("events", JoinType.LEFT);
 
         Predicate predicate = buildPredicate(cb, root, pinned);
         cq.where(predicate);
@@ -50,6 +48,7 @@ public class CriteriaCompilationRepository {
 
     private Predicate buildPredicate(CriteriaBuilder cb, Root<CompilationEntity> root, Boolean pinned) {
         List<Predicate> predicateList = new ArrayList<>();
+
 
         if (pinned != null) {
             if (pinned) {
