@@ -9,6 +9,7 @@ import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.dto.UpdateEventUserRequest;
+import ru.practicum.ewm.ratings.RatingDto;
 import ru.practicum.ewm.users.UserEntity;
 import ru.practicum.ewm.users.UserMapper;
 import ru.practicum.ewm.users.UserShortDto;
@@ -38,8 +39,7 @@ public class EventMapper {
                 .build();
     }
 
-    public EventShortDto buildEventShortDto(EventEntity eventEntity,
-                                            Integer confirmedReq) {
+    public EventShortDto buildEventShortDto(EventEntity eventEntity, Integer confirmedReq) {
         return EventShortDto.builder()
                 .id(eventEntity.getId())
                 .annotation(eventEntity.getAnnotation())
@@ -50,6 +50,21 @@ public class EventMapper {
                 .paid(eventEntity.isPaid())
                 .title(eventEntity.getTitle())
                 .views(eventEntity.getViews())
+                .build();
+    }
+
+    public EventShortDto buildEventShortDto(EventEntity eventEntity, Integer confirmedReq, RatingDto ratingDto) {
+        return EventShortDto.builder()
+                .id(eventEntity.getId())
+                .annotation(eventEntity.getAnnotation())
+                .category(categoryMapper.toDto(eventEntity.getCategory()))
+                .confirmedRequests(confirmedReq)
+                .eventDate(eventEntity.getEventDate().format(DTF))
+                .initiator(userMapper.toUserShortDto(eventEntity.getInitiator()))
+                .paid(eventEntity.isPaid())
+                .title(eventEntity.getTitle())
+                .views(eventEntity.getViews())
+                .rating(ratingDto)
                 .build();
     }
 
@@ -68,6 +83,25 @@ public class EventMapper {
                 .paid(eventEntity.isPaid())
                 .createdOn(eventEntity.getCreatedOn().format(DTF))
                 .participantLimit(eventEntity.getParticipantLimit())
+                .build();
+    }
+
+    public EventFullDto buildEventFullDto(EventEntity eventEntity, RatingDto ratingDto) {
+        return EventFullDto.builder()
+                .id(eventEntity.getId())
+                .category(categoryMapper.toDto(eventEntity.getCategory()))
+                .initiator(userMapper.toUserShortDto(eventEntity.getInitiator()))
+                .location(new Location(eventEntity.getLatitude(), eventEntity.getLongitude()))
+                .eventDate(eventEntity.getEventDate().format(DTF))
+                .annotation(eventEntity.getAnnotation())
+                .requestModeration(eventEntity.isRequestModeration())
+                .description(eventEntity.getDescription())
+                .state(eventEntity.getState())
+                .title(eventEntity.getTitle())
+                .paid(eventEntity.isPaid())
+                .createdOn(eventEntity.getCreatedOn().format(DTF))
+                .participantLimit(eventEntity.getParticipantLimit())
+                .rating(ratingDto)
                 .build();
     }
 

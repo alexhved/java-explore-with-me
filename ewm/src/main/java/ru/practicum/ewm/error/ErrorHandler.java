@@ -130,7 +130,7 @@ public class ErrorHandler {
         return errorResponse;
     }
 
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -142,5 +142,5 @@ public class ErrorHandler {
 
         log.warn(errorResponse.toString());
         return errorResponse;
-    }
+    }*/
 }

@@ -1,2 +1,3 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+# 
+[pr feature ratings](https://github.com/alexhved/java-explore-with-me/pull/3)
